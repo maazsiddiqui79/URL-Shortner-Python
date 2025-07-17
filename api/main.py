@@ -75,8 +75,8 @@ def home():
             short_code_value = sc.password_gen()
             if not URL_DB_CLASS.query.filter_by(short_code=short_code_value).first():
                 break
-        base_url = request.url_root
-        short_code_gen = base_url+short_code_value
+        
+        short_code_gen =short_code_value
         
         print(og_url,short_code_gen,passw)
         new_url = URL_DB_CLASS(original_url=og_url, short_code=short_code_gen, password=passw)
@@ -105,6 +105,7 @@ def delete():
     del_form = MY_DELETE_FORM()
     if del_form.validate_on_submit():
         del_short_code = del_form.shorten_url.data
+        del_short_code = del_short_code.replace(request.url_root,"")
         del_password = del_form.password_verification.data
         data = URL_DB_CLASS.query.filter_by(short_code=del_short_code,password=del_password).first()
         if data:
