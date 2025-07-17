@@ -67,7 +67,6 @@ class URL_DB_CLASS(db.Model):
 def home():
     form = MY_FORM()
     short_code_gen= ''
-    shorten_url = ''
     if form.validate_on_submit():
         og_url = form.original_url_input.data
         passw = form.password_input.data
@@ -76,7 +75,9 @@ def home():
             short_code_value = sc.password_gen()
             if not URL_DB_CLASS.query.filter_by(short_code=short_code_value).first():
                 break
-        short_code_gen = short_code_value
+        base_url = request.url_root
+        short_code_gen = base_url+short_code_value
+        
         print(og_url,short_code_gen,passw)
         new_url = URL_DB_CLASS(original_url=og_url,short_code=short_code_gen,password=passw)
         if new_url:
@@ -89,9 +90,7 @@ def home():
         except Exception as e:
             db.session.rollback()
             flash("Failed to save URL. Try again.", "danger")
-        base_url = request.url_root
-        shorten_url = base_url+short_code_gen
-    return render_template('index.html',form=form,short_code=shorten_url)
+    return render_template('index.html',form=form,short_code=short_code_gen)
 
 @app.route('/<shc>',methods=["GET","POST"])
 def redirect_url(shc):
