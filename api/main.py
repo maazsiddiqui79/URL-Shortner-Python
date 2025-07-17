@@ -5,7 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField , SubmitField 
 from wtforms.validators import DataRequired ,ValidationError , Length
 from datetime import datetime
-import pyperclip
 import random
 
 class SHORT_CODE():
