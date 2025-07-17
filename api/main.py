@@ -5,8 +5,32 @@ from flask_wtf import FlaskForm
 from wtforms import StringField , SubmitField 
 from wtforms.validators import DataRequired ,ValidationError , Length
 from datetime import datetime
-from short_code_module import SHORT_CODE
 import pyperclip
+import random
+
+class SHORT_CODE():
+
+    @staticmethod
+    def password_gen():
+        characters = [
+            # Letters
+            'A','B','C','D','E','F','G','H','I','J','K','L','M',
+            'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+            'a','b','c','d','e','f','g','h','i','j','k','l','m',
+            'n','o','p','q','r','s','t','u','v','w','x','y','z',
+
+            # Digits
+            '0','1','2','3','4','5','6','7','8','9',
+
+            # Symbols and punctuation
+        ]
+
+        weights = [5 if i.isalpha() else (3 if i.isnumeric() else 1) for i in characters]
+        password_list = random.choices(characters, k=8, weights=weights)
+        actual_password = "".join(password_list)
+        return actual_password
+
+
 
 def validate_url(form, field):
     if not field.data.startswith(('http://', 'https://')):
@@ -48,7 +72,8 @@ def home():
         og_url = form.original_url_input.data
         passw = form.password_input.data
         while True:
-            short_code_value = SHORT_CODE.password_gen()
+            sc=SHORT_CODE()
+            short_code_value = sc.password_gen()
             if not URL_DB_CLASS.query.filter_by(short_code=short_code_value).first():
                 break
         short_code_gen = short_code_value
