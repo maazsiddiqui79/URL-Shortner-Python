@@ -62,7 +62,7 @@ class URL_DB_CLASS(db.Model):
     def __repr__(self):
         return f"<URL_DB_CLASS id={self.id} short_code='{self.short_code}' original_url='{self.original_url}'>"
 
-base_url = request.host_url
+
 @app.route('/',methods=["GET","POST"])
 def home():
     form = MY_FORM()
@@ -94,6 +94,7 @@ def home():
 def redirect_url(shc):
     nshc = shc
     data = URL_DB_CLASS.query.filter_by(short_code=nshc).first()
+    
     if data:
         return redirect(data.original_url)
     else:
