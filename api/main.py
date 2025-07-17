@@ -67,6 +67,7 @@ class URL_DB_CLASS(db.Model):
 def home():
     form = MY_FORM()
     short_code_gen= ''
+    shorten_url = ''
     if form.validate_on_submit():
         og_url = form.original_url_input.data
         passw = form.password_input.data
