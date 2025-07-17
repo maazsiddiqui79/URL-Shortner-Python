@@ -79,17 +79,15 @@ def home():
         short_code_gen = base_url+short_code_value
         
         print(og_url,short_code_gen,passw)
-        new_url = URL_DB_CLASS(original_url=og_url,short_code=short_code_gen,password=passw)
-        if new_url:
-            flash("URL Created successfully!", "success")
-        else:
-            flash("Invalid URL", "danger")
+        new_url = URL_DB_CLASS(original_url=og_url, short_code=short_code_gen, password=passw)
         try:
             db.session.add(new_url)
             db.session.commit()
+            flash("URL Created successfully!", "success")
         except Exception as e:
             db.session.rollback()
             flash("Failed to save URL. Try again.", "danger")
+
     return render_template('index.html',form=form,short_code=short_code_gen)
 
 @app.route('/<shc>',methods=["GET","POST"])
