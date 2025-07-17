@@ -55,7 +55,7 @@ db = SQLAlchemy(app=app)
 class URL_DB_CLASS(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     original_url = db.Column(db.String(500),nullable=False)
-    short_code = db.Column(db.String(12),unique=True,nullable=False)
+    short_code = db.Column(db.String(42),unique=True,nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     password = db.Column(db.String(20),nullable=False)
 
