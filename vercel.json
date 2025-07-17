@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    { "src": "/delete", "methods": ["GET", "POST"], "dest": "app.py" },
+    { "src": "/copy", "methods": ["GET", "POST"], "dest": "app.py" },
+    { "src": "/", "methods": ["GET", "POST"], "dest": "app.py" },
+    { "src": "/(.*)", "methods": ["GET", "POST"], "dest": "app.py" }
+  ]
+}
