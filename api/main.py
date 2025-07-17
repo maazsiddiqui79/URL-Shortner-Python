@@ -6,42 +6,40 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
 from datetime import datetime
 from short_code_module import SHORT_CODE
+import pyperclip
 
-
-# Validator to check if the URL starts with http/https
+# Custom URL Validator
 def validate_url(form, field):
     if not field.data.startswith(('http://', 'https://')):
         raise ValidationError('URL must start with http:// or https://')
 
-# Form to handle URL shortening input
+# Form Class
 class MY_FORM(FlaskForm):
     original_url_input = StringField("Enter Your Url", validators=[DataRequired(), validate_url, Length(max=500)])
     password_input = StringField("Enter Your Password", validators=[DataRequired()])
     url_btn = SubmitField("Shorten Url")
 
-# Form to handle URL deletion input
+# Delete Form
 class MY_DELETE_FORM(FlaskForm):
     shorten_url = StringField("Enter Your Url", validators=[DataRequired(), validate_url])
     password_verification = StringField("Enter Your Password", validators=[DataRequired()])
     delete_btn = SubmitField("Delete URL")
 
-# Flask app initialization
+# Flask App Initialization
 app = Flask(
     __name__,
     template_folder='templates',
     static_folder='static',
-    instance_path='/tmp'  # Required for Vercel compatibility
+    instance_path='/tmp'  # Required for Vercel
 )
 
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
-
-# PostgreSQL database config (Render.com)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://go_todo_database_user:xcb0mg7xwZO3O5G6t8hwYy8O1XghwNGB@dpg-d1pan9mr433s73d6r1jg-a.oregon-postgres.render.com/go_todo_database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app=app)
+db = SQLAlchemy(app)
 
-# Database model for URL storage
+# Database Model
 class URL_DB_CLASS(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     original_url = db.Column(db.String(500), nullable=False)
@@ -52,13 +50,11 @@ class URL_DB_CLASS(db.Model):
     def __repr__(self):
         return f"<URL_DB_CLASS id={self.id} short_code='{self.short_code}' original_url='{self.original_url}'>"
 
-# Home route: URL shortening
+# Home Route
 @app.route('/', methods=["GET", "POST"])
 def home():
     form = MY_FORM()
     short_code_gen = ''
-    new_url = None
-
     if form.validate_on_submit():
         og_url = form.original_url_input.data
         passw = form.password_input.data
@@ -69,8 +65,9 @@ def home():
                 break
 
         short_code_gen = short_code_value
-        new_url = URL_DB_CLASS(original_url=og_url, short_code=short_code_gen, password=passw)
 
+        print(og_url, short_code_gen, passw)
+        new_url = URL_DB_CLASS(original_url=og_url, short_code=short_code_gen, password=passw)
         try:
             db.session.add(new_url)
             db.session.commit()
@@ -81,17 +78,17 @@ def home():
 
     return render_template('index.html', form=form, short_code=short_code_gen)
 
-# Route for redirection using short code
+# Redirect Route
 @app.route('/<shc>', methods=["GET", "POST"])
 def redirect_url(shc):
-    data = URL_DB_CLASS.query.filter_by(short_code=shc).first()
+    nshc = shc
+    data = URL_DB_CLASS.query.filter_by(short_code=nshc).first()
     if data:
         return redirect(data.original_url)
     else:
-        flash("Short URL not found.", "danger")
         return redirect('/')
 
-# Route for deleting shortened URL
+# Delete Route
 @app.route('/delete', methods=["GET", "POST"])
 def delete():
     del_form = MY_DELETE_FORM()
@@ -99,7 +96,6 @@ def delete():
         del_short_code = del_form.shorten_url.data
         del_password = del_form.password_verification.data
         data = URL_DB_CLASS.query.filter_by(short_code=del_short_code, password=del_password).first()
-
         if data:
             db.session.delete(data)
             db.session.commit()
@@ -109,11 +105,18 @@ def delete():
 
     return render_template('delete.html', del_form=del_form)
 
+# Copy Route
+@app.route('/copy', methods=["GET", "POST"])
+def copy():
+    data = URL_DB_CLASS.query.order_by(URL_DB_CLASS.created_at.desc()).first()
+    if data:
+        pyperclip.copy(data.short_code)
+    return redirect(url_for('home'))
 
-# Create database tables
+# Create DB Tables
 with app.app_context():
     db.create_all()
 
-# For local testing
+# Main
 if __name__ == "__main__":
     app.run(debug=True)
