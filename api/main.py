@@ -104,15 +104,6 @@ def delete():
             flash("No match found. Please check the URL and password.", "danger")
 
     return render_template('delete.html', del_form=del_form)
-
-# Copy Route
-@app.route('/copy', methods=["GET", "POST"])
-def copy():
-    data = URL_DB_CLASS.query.order_by(URL_DB_CLASS.created_at.desc()).first()
-    if data:
-        pyperclip.copy(data.short_code)
-    return redirect(url_for('home'))
-
 # Create DB Tables
 with app.app_context():
     db.create_all()
