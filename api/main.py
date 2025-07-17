@@ -88,8 +88,8 @@ def home():
         except Exception as e:
             db.session.rollback()
             flash("Failed to save URL. Try again.", "danger")
-    base_url = request.url_root
-    shorten_url = base_url+short_code_gen
+        base_url = request.url_root
+        shorten_url = base_url+short_code_gen
     return render_template('index.html',form=form,short_code=shorten_url)
 
 @app.route('/<shc>',methods=["GET","POST"])
