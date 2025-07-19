@@ -78,43 +78,51 @@
 </head>
 <body>
 
-  <header>
-    <a href="/delete" class="nav-link">Delete Existing URL</a>
-  </header>
+  <header class="text-center py-3 bg-white shadow-sm">
+  <a href="/delete" class="nav-link d-inline-block">Delete Existing URL</a>
+</header>
 
-  <div class="shortener-box">
-    <h2>URL Shortener</h2>
-    <form action="/" method="post">
-      {{ form.csrf_token }}
+  <div class="container">
+     <div class="row justify-content-center">
 
-      {{form.original_url_input.label}}<br>
-      {{form.original_url_input(size=45)}}<br>
-
-      {% for error in form.original_url_input.errors %}
+       <div class="col-12 col-md-8 col-lg-5">
+         
+         <div class="shortener-box">
+           <h2>URL Shortener</h2>
+      <form action="/" method="post">
+        {{ form.csrf_token }}
+        
+        {{form.original_url_input.label}}<br>
+        {{form.original_url_input(size=45)}}<br>
+        
+        {% for error in form.original_url_input.errors %}
         <span>{{ error }}</span>
-      {% endfor %}
-
-
-      
-
+        {% endfor %}
+        
+        
+        
+        
         <div id="flash-messages">
           {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %} {% for category, message in messages %}
-          <div
+            messages %} {% for category, message in messages %}
+            <div
             class="alert alert-{{ category }} alert-dismissible fade show"
             role="alert"
-          >
+            >
             {{ message }}
             <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
             ></button>
           </div>
           {% endfor %} {% endif %} {% endwith %}
         </div>
-
+      </div>
+     </div>
+    </div>
+        
 
 
 
@@ -130,25 +138,17 @@
     {% endif %}
   </div>
 
-  <footer>
-      <p>&copy; 2025 URL Shortener. All rights reserved.</p>
-      <p>
-        <a
-          class="nav-link-footer"
-          href="https://go-todo-task.vercel.app/"
-          target="_blank"
-          >🚀</a
-        > | <a
-          class="nav-link-footer"
-          href="https://www.linkedin.com/in/siddiqui-maazzz/"
-          >Linkedin</a
-        > | <a class="nav-link-footer" href="https://github.com/maazsiddiqui79"
-          >Git Hub</a
-        > | <a href="tel:+91 8850281310" class="nav-link-footer"
-          >+19 88502 81310</a
-        >
-      </p>
-    </footer>
+
+  <footer class="text-center py-3 bg-white shadow-sm">
+  <p class="mb-1">&copy; 2025 URL Shortener. All rights reserved.</p>
+  <p class="mb-0">
+    <a class="nav-link-footer me-2" href="https://go-todo-task.vercel.app/" target="_blank">🚀</a>
+    <a class="nav-link-footer me-2" href="https://www.linkedin.com/in/siddiqui-maazzz/">LinkedIn</a>
+    <a class="nav-link-footer me-2" href="https://github.com/maazsiddiqui79">GitHub</a>
+    <a class="nav-link-footer" href="tel:+91 8850281310">+91 88502 81310</a>
+  </p>
+</footer>
+
 
 </body>
 </html>
