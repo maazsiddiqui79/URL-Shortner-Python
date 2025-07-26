@@ -117,8 +117,8 @@ def delete():
     return render_template('delete.html',del_form=del_form)
 
 
-with app.app_context():
-    db.create_all()
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
