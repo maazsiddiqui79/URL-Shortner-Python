@@ -48,7 +48,7 @@ class MY_DELETE_FORM(FlaskForm):
 app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://go_todo_task_db_user:z3YSJb1og6V5aDVXuJqv9Kgsn7VgBpTO@dpg-d20liqndiees739m4op0-a.oregon-postgres.render.com/go_todo_task_db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mu-url-database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mu-url-database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app=app)
