@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"crossorigin="anonymous"/>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <meta charset="UTF-8" />
@@ -78,9 +83,7 @@
     </style>
   </head>
   <body>
-    <header>
-      🏠 <a href="/" class="nav-link-footer">Home</a>
-    </header>
+    <header>🏠 <a href="/" class="nav-link-footer">Home</a></header>
 
     <div class="delete-box">
       <h1>Delete The URL</h1>
@@ -110,8 +113,6 @@
           {% endfor %} {% endif %} {% endwith %}
         </div>
 
-        
-
         <br /><br />
         {{del_form.password_verification.label}}<br />
         {{del_form.password_verification(size=45)}}<br /><br />
@@ -125,18 +126,22 @@
       <p>
         <a
           class="nav-link-footer"
-          href="https://go-todo-task.vercel.app/"
+          href="https://go-todo-task.onrender.com/"
           target="_blank"
           >🚀</a
-        > | <a
+        >
+        |
+        <a
           class="nav-link-footer"
           href="https://www.linkedin.com/in/siddiqui-maazzz/"
           >Linkedin</a
-        > | <a class="nav-link-footer" href="https://github.com/maazsiddiqui79"
-          >Git Hub</a
-        > | <a href="tel:+91 8850281310" class="nav-link-footer"
-          >+19 88502 81310</a
         >
+        |
+        <a class="nav-link-footer" href="https://github.com/maazsiddiqui79"
+          >Git Hub</a
+        >
+        |
+        <a href="tel:+91 8850281310" class="nav-link-footer">+19 88502 81310</a>
       </p>
     </footer>
   </body>

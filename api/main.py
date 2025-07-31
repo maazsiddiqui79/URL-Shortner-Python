@@ -69,6 +69,7 @@ def home():
     form = MY_FORM()
     short_code_gen= ''
     if form.validate_on_submit():
+        
         og_url = form.original_url_input.data
         passw = form.password_input.data
         while True:
@@ -87,7 +88,9 @@ def home():
             flash("URL Created successfully!", "success")
         except Exception as e:
             db.session.rollback()
+            print("Database Error:", e)  # Add this line
             flash("Failed to save URL. Try again.", "danger")
+
 
     return render_template('index.html',form=form,short_code=short_code_gen)
 
