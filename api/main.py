@@ -47,8 +47,7 @@ class MY_DELETE_FORM(FlaskForm):
 
 app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://go_todo_task_db_user:z3YSJb1og6V5aDVXuJqv9Kgsn7VgBpTO@dpg-d20liqndiees739m4op0-a.oregon-postgres.render.com/go_todo_task_db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mu-url-database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://go_todo_database_user:xcb0mg7xwZO3O5G6t8hwYy8O1XghwNGB@dpg-d1pan9mr433s73d6r1jg-a.oregon-postgres.render.com/go_todo_database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app=app)
@@ -69,7 +68,6 @@ def home():
     form = MY_FORM()
     short_code_gen= ''
     if form.validate_on_submit():
-        
         og_url = form.original_url_input.data
         passw = form.password_input.data
         while True:
@@ -77,8 +75,8 @@ def home():
             short_code_value = sc.password_gen()
             if not URL_DB_CLASS.query.filter_by(short_code=short_code_value).first():
                 break
-        
-        short_code_gen =short_code_value
+        base_url = request.url_root
+        short_code_gen = base_url+short_code_value
         
         print(og_url,short_code_gen,passw)
         new_url = URL_DB_CLASS(original_url=og_url, short_code=short_code_gen, password=passw)
@@ -88,9 +86,7 @@ def home():
             flash("URL Created successfully!", "success")
         except Exception as e:
             db.session.rollback()
-            print("Database Error:", e)  # Add this line
             flash("Failed to save URL. Try again.", "danger")
-
 
     return render_template('index.html',form=form,short_code=short_code_gen)
 
@@ -109,7 +105,6 @@ def delete():
     del_form = MY_DELETE_FORM()
     if del_form.validate_on_submit():
         del_short_code = del_form.shorten_url.data
-        del_short_code = del_short_code.replace(request.url_root,"")
         del_password = del_form.password_verification.data
         data = URL_DB_CLASS.query.filter_by(short_code=del_short_code,password=del_password).first()
         if data:
@@ -121,8 +116,8 @@ def delete():
     return render_template('delete.html',del_form=del_form)
 
 
+with app.app_context():
+    db.create_all()
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)

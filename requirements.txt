@@ -1,5 +1,4 @@
-Flask
-Flask-WTF
-Flask-SQLAlchemy
-psycopg
-wtforms
+Flask==2.3.3
+Flask-WTF==1.2.1
+Flask-SQLAlchemy==3.1.1
+psycopg2-binary==2.9.9
