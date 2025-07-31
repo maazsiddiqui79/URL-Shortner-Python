@@ -47,7 +47,7 @@ class MY_DELETE_FORM(FlaskForm):
 
 app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://go_todo_database_user:xcb0mg7xwZO3O5G6t8hwYy8O1XghwNGB@dpg-d1pan9mr433s73d6r1jg-a.oregon-postgres.render.com/go_todo_database'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://my-url-data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app=app)
@@ -115,9 +115,11 @@ def delete():
             flash("No match found. Please check the URL and password.", "danger")
     return render_template('delete.html',del_form=del_form)
 
-
-with app.app_context():
-    db.create_all()
+try:
+    with app.app_context():
+        db.create_all()
+except Exception as e:
+    print(f"Database error: {e}")
 
 if __name__ == "__main__":
     app.run(debug=True)
