@@ -2,17 +2,15 @@ from flask import Blueprint, render_template, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-from models.models import db, URL_DB_CLASS
+from ..models.models import db, URL_DB_CLASS
 
-del_route = Blueprint('del_route', __name__)
+del_route = Blueprint('delete_route', __name__)
 
-# ---------------------- Forms ----------------------
 class MY_DELETE_FORM(FlaskForm):
     shorten_url = StringField("Enter Your Url", validators=[DataRequired()])
     password_verification = StringField("Enter Your Password", validators=[DataRequired()])
     delete_btn = SubmitField("Delete URL")
 
-# ---------------------- Delete Route ----------------------
 @del_route.route("/delete", methods=["GET", "POST"])
 def delete():
     del_form = MY_DELETE_FORM()

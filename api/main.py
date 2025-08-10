@@ -1,15 +1,9 @@
-import sys
+from flask import Flask, redirect, flash, url_for
+from home_route.home_route import h_route 
+from delete_route.delete_route import del_route
+from models.models import db, URL_DB_CLASS
 import os
 
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-
-from flask import Flask, redirect, flash, url_for
-from .home_route.home_route import h_route
-from .delete_route.delete_route import del_route
-from .models.models import db, URL_DB_CLASS
-
-
-# ---------------------- App Configuration ----------------------
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('/tmp', 'my-url-data.db')
@@ -17,11 +11,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-# Register Blueprints
 app.register_blueprint(h_route, url_prefix='')
 app.register_blueprint(del_route, url_prefix='')
 
-# ---------------------- Redirect Route ----------------------
 @app.route("/<shc>", methods=["GET"])
 def redirect_url(shc):
     data = URL_DB_CLASS.query.filter_by(short_code=shc).first()
@@ -29,9 +21,8 @@ def redirect_url(shc):
         return redirect(data.original_url)
     else:
         flash("URL not found", "danger")
-        return redirect(url_for("h_route.home"))
+        return redirect(url_for("home_route.home"))
 
-# ---------------------- DB Initialization ----------------------
 with app.app_context():
     db.create_all()
 
