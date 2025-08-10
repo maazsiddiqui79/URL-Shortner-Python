@@ -2,7 +2,7 @@ from flask import render_template, redirect, flash, request, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length
-from url_short.models import URL_DB_CLASS
+from app.models import URL_DB_CLASS
 import random
 
 # ---------------------- Short Code Generator ----------------------

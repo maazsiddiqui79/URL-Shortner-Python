@@ -1,5 +1,5 @@
 # api/run.py
-from url_short import app  # Import from your package
+from app import app  # Import from your package
 
 # Vercel looks for "app" here
 if __name__ != "__main__":

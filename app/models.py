@@ -1,6 +1,6 @@
 from datetime import datetime
 # from flask_sqlalchemy import SQLAlchemy
-from url_short import db
+from app import db
 
 class URL_DB_CLASS(db.Model):
     id = db.Column(db.Integer, primary_key=True)

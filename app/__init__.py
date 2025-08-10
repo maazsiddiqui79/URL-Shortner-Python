@@ -13,7 +13,7 @@ app.secret_key = 'supersecretkey'
 db = SQLAlchemy(app)
 
 # Import routes after db is initialized
-from url_short import routes
+from app import routes
 
 # Create tables if they don't exist
 with app.app_context():
