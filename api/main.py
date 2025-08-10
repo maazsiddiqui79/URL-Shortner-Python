@@ -1,6 +1,6 @@
 from flask import Flask, redirect, flash, url_for
-from home_route import h_route
-from delete_routes import del_route
+from api.home_rou.home_route import h_route
+from api.dele_route.delete_route import del_route
 from models import db, URL_DB_CLASS
 
 # ---------------------- App Configuration ----------------------
