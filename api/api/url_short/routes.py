@@ -1,10 +1,12 @@
-from flask import Flask, render_template, redirect, flash, request, url_for
-from flask_sqlalchemy import SQLAlchemy
+
+from url_short.models import URL_DB_CLASS
+import random
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
-from datetime import datetime
-import random
+from url_short import app , db
+from flask import render_template, redirect, flash, request, url_for
+
 
 # ---------------------- Short Code Generator ----------------------
 class SHORT_CODE:
@@ -35,25 +37,8 @@ class MY_DELETE_FORM(FlaskForm):
     delete_btn = SubmitField("Delete URL")
 
 # ---------------------- App Configuration ----------------------
-app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
-app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
-
-# ✅ SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my-url-data.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
 
 # ---------------------- Database Model ----------------------
-class URL_DB_CLASS(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    original_url = db.Column(db.String(500), nullable=False)
-    short_code = db.Column(db.String(42), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    password = db.Column(db.String(20), nullable=False)
-
-    def __repr__(self):
-        return f"<URL_DB_CLASS id={self.id} short_code='{self.short_code}' original_url='{self.original_url}'>"
 
 # ---------------------- Routes ----------------------
 
@@ -109,7 +94,3 @@ try:
 except Exception as e:
     print("Database initialization error:", e)
 
-# ---------------------- Run Server ----------------------
-if __name__ == "__main__":
-    # DEBUG ON
-    app.run(debug=True)
