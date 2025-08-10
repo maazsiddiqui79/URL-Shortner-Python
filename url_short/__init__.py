@@ -26,3 +26,5 @@ from url_short import routes
 # Create tables if they don't exist (important for /tmp DB on Vercel)
 with app.app_context():
     db.create_all()
+from url_short import routes
+routes.register_routes(app, db)
