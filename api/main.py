@@ -2,7 +2,10 @@ from flask import Flask, redirect, flash, url_for
 from home_route.home_route import h_route
 from delete_route.delete_route import del_route
 from models.models import db, URL_DB_CLASS
+import sys
 import os
+
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 # ---------------------- App Configuration ----------------------
 app = Flask(__name__, template_folder='templates', static_folder='static')
