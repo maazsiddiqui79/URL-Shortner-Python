@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
-from api.models.models import db, URL_DB_CLASS
+from models.models import db, URL_DB_CLASS
 import random
 
 h_route = Blueprint('h_route', __name__)
