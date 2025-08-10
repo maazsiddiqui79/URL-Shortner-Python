@@ -111,4 +111,5 @@ except Exception as e:
 
 # ---------------------- Run Server ----------------------
 if __name__ == "__main__":
+    # DEBUG ON
     app.run(debug=True)
