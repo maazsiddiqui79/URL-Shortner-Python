@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, ValidationError, Length
 from models import db, URL_DB_CLASS
 import random
 
-home_route = Blueprint('home_route', __name__)
+h_route = Blueprint('h_route', __name__)
 
 # ---------------------- Custom Validator ----------------------
 def validate_url(form, field):
@@ -31,7 +31,7 @@ class SHORT_CODE:
         return ''.join(random.choices(characters, k=8, weights=weights))
 
 # ---------------------- Home Route ----------------------
-@home_route.route("/", methods=["GET", "POST"])
+@h_route.route("/", methods=["GET", "POST"])
 def home():
     form = MY_FORM()
     short_code_gen = ""

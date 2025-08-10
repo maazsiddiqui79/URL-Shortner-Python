@@ -1,5 +1,5 @@
 from flask import Flask, redirect, flash, url_for
-from home_route import home_route
+from home_route import h_route
 from delete_routes import del_route
 from models import db, URL_DB_CLASS
 
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # Register Blueprints
-app.register_blueprint(home_route, url_prefix='')
+app.register_blueprint(h_route, url_prefix='')
 app.register_blueprint(del_route, url_prefix='')
 
 # ---------------------- Redirect Route ----------------------
@@ -24,7 +24,7 @@ def redirect_url(shc):
         return redirect(data.original_url)
     else:
         flash("URL not found", "danger")
-        return redirect(url_for("home_route.home"))
+        return redirect(url_for("h_route.home"))
 
 # ---------------------- DB Initialization ----------------------
 with app.app_context():
