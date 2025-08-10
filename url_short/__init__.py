@@ -1,23 +1,5 @@
-# from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
-
-
-
-
-# app = Flask(__name__, template_folder='templates', static_folder='static')
-# app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
-
-# # ✅ SQLite database
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my-url-data.db'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# db = SQLAlchemy(app)
-# from . import routes
-
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import os
 
 app = Flask(__name__)
@@ -37,6 +19,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'supersecretkey'  # Change for production
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
+# Import routes after db is initialized
 from url_short import routes
+
+# Create tables if they don't exist (important for /tmp DB on Vercel)
+with app.app_context():
+    db.create_all()
