@@ -1,13 +1,10 @@
-from flask import Flask, render_template, redirect, flash, request, url_for , blueprints
+from flask import Flask, render_template, redirect, flash, request, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
-from .models import URL_DB_CLASS , db
 import random
 from .delete_routes import del_route
-
-
-
+from .models import db, URL_DB_CLASS
 
 # ---------------------- Short Code Generator ----------------------
 class SHORT_CODE:
@@ -32,24 +29,17 @@ class MY_FORM(FlaskForm):
     password_input = StringField("Enter Your Password", validators=[DataRequired()])
     url_btn = SubmitField("Shorten Url")
 
-
-
 # ---------------------- App Configuration ----------------------
-app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
 
-# ✅ SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my-url-data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.register_blueprint(del_route,url_prefix='')
 
-db.init_app(app) 
-
-
-# ---------------------- Database Model ----------------------
+db.init_app(app)
+app.register_blueprint(del_route, url_prefix='')
 
 # ---------------------- Routes ----------------------
-
 @app.route("/", methods=["GET", "POST"])
 def home():
     form = MY_FORM()
@@ -58,14 +48,14 @@ def home():
         og_url = form.original_url_input.data
         passw = form.password_input.data
         sc = SHORT_CODE().password_gen()
-        short_code_gen = request.url_root + sc  # Keep your original concatenation logic
+        short_code_gen = request.url_root + sc
 
         new_url = URL_DB_CLASS(original_url=og_url, short_code=sc, password=passw)
         try:
             db.session.add(new_url)
             db.session.commit()
             flash("URL Created successfully!", "success")
-        except Exception as e:
+        except Exception:
             db.session.rollback()
             flash("An error occurred while saving to the database.", "danger")
     return render_template("index.html", form=form, short_code=short_code_gen)
@@ -79,15 +69,6 @@ def redirect_url(shc):
         flash("URL not found", "danger")
         return redirect(url_for("home"))
 
-
 # ---------------------- DB Initialization ----------------------
-try:
-    with app.app_context():
-        db.create_all()
-except Exception as e:
-    print("Database initialization error:", e)
-
-# ---------------------- Run Server ----------------------
-if __name__ == "__main__":
-    # DEBUG ON
-    app.run(debug=True)
+with app.app_context():
+    db.create_all()
