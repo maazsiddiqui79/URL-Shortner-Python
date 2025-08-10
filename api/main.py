@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, flash, request, url_for , bl
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
-from models import URL_DB_CLASS , db
+from .models import URL_DB_CLASS , db
 import random
 from delete_routes import del_route
 

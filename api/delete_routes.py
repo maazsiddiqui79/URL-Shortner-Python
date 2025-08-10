@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
 from __main__ import URL_DB_CLASS ,db
-from models import db, URL_DB_CLASS   # ✅ import here
+from .models import db, URL_DB_CLASS   # ✅ import here
 
 
 
