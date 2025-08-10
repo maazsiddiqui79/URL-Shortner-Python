@@ -1,10 +1,12 @@
-from flask import Flask, render_template, redirect, flash, request, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, flash, request, url_for , blueprints
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
-from datetime import datetime
+from models import URL_DB_CLASS , db
 import random
+from delete_routes import del_route
+
+
 
 
 # ---------------------- Short Code Generator ----------------------
@@ -30,10 +32,7 @@ class MY_FORM(FlaskForm):
     password_input = StringField("Enter Your Password", validators=[DataRequired()])
     url_btn = SubmitField("Shorten Url")
 
-class MY_DELETE_FORM(FlaskForm):
-    shorten_url = StringField("Enter Your Url", validators=[DataRequired()])
-    password_verification = StringField("Enter Your Password", validators=[DataRequired()])
-    delete_btn = SubmitField("Delete URL")
+
 
 # ---------------------- App Configuration ----------------------
 app = Flask(__name__, template_folder='templates', static_folder='static', instance_path='/tmp')
@@ -42,19 +41,12 @@ app.secret_key = 'MY-VERY-VERY-ULTRA-CONFIDENTIAL-SECRECT-KEY'
 # ✅ SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my-url-data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.register_blueprint(del_route,url_prefix='')
 
-db = SQLAlchemy(app)
+db.init_app(app) 
+
 
 # ---------------------- Database Model ----------------------
-class URL_DB_CLASS(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    original_url = db.Column(db.String(500), nullable=False)
-    short_code = db.Column(db.String(42), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    password = db.Column(db.String(20), nullable=False)
-
-    def __repr__(self):
-        return f"<URL_DB_CLASS id={self.id} short_code='{self.short_code}' original_url='{self.original_url}'>"
 
 # ---------------------- Routes ----------------------
 
@@ -87,21 +79,6 @@ def redirect_url(shc):
         flash("URL not found", "danger")
         return redirect(url_for("home"))
 
-@app.route("/delete", methods=["GET", "POST"])
-def delete():
-    del_form = MY_DELETE_FORM()
-    if del_form.validate_on_submit():
-        full_url = del_form.shorten_url.data.strip()
-        del_short_code = full_url.split('/')[-1]  # Extract shortcode from full URL
-        del_password = del_form.password_verification.data
-        data = URL_DB_CLASS.query.filter_by(short_code=del_short_code, password=del_password).first()
-        if data:
-            db.session.delete(data)
-            db.session.commit()
-            flash("Data Deleted Successfully", "success")
-        else:
-            flash("No Match Found! Check URL and Password.", "danger")
-    return render_template("delete.html", del_form=del_form)
 
 # ---------------------- DB Initialization ----------------------
 try:
