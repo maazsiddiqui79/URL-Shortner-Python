@@ -1,7 +1,7 @@
 from flask import Flask, redirect, flash, url_for
-from my_url_app.home_route import home_route
-from my_url_app.delete_routes import del_route
-from my_url_app.models import db, URL_DB_CLASS
+from home_route import home_route
+from delete_routes import del_route
+from models import db, URL_DB_CLASS
 
 # ---------------------- App Configuration ----------------------
 app = Flask(__name__, template_folder='templates', static_folder='static')

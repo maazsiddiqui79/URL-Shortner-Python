@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-from my_url_app.models import db, URL_DB_CLASS
+from models import db, URL_DB_CLASS
 
 del_route = Blueprint('del_route', __name__)
 
