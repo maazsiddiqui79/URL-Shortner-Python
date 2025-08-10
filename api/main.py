@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Length
 from .models import URL_DB_CLASS , db
 import random
-from delete_routes import del_route
+from .delete_routes import del_route
 
 
 
