@@ -20,7 +20,7 @@ class SHORT_CODE:
 
 # ---------------------- Custom Validator ----------------------
 def validate_url(form, field):
-    if not field.data.startswith(('http://', 'https://')):
+    if not field.data.startswith(('http://', 'https://','www')):
         raise ValidationError('URL must start with http:// or https://')
 
 # ---------------------- Forms ----------------------
