@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}URL Shortener{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Gemini_Generated_Image_8nlus88nlus88nlu.png') }}" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">LinkShorty</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/delete">Manage</a>
+            <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">🌙</button>
+        </div>
+    </nav>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages-container" style="position: absolute; top: 80px; width: 100%; max-width: 500px; z-index: 999;">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        <button type="button" class="btn-close" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 URL Shortener. Check out my <a href="https://the-maaz-portfolio.vercel.app/" target="_blank" class="footer-link">Portfolio</a>.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

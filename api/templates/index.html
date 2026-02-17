@@ -1,133 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link rel="shortcut icon" href="/static/Gemini_Generated_Image_8nlus88nlus88nlu.png" type="image/x-icon">
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+{% extends "layout.html" %}
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Added for responsiveness -->
-    <title>URL Shortener</title>
-    <style>
-      .cool-font {
-        font-family: "Times New Roman", Times, serif;
-        font-weight: 700;
-        font-size: 25px;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      header,
-      footer {
-        width: 100%;
-        text-align: center;
-        padding: 15px 0;
-        background-color: #ffffff;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
-      }
-      .nav-link-footer {
-        text-decoration: none;
-        color: #007bff;
-        font-weight: bold;
-      }
-      .nav-link:hover {
-        color: red;
-        text-decoration: underline;
-      }
-      span {
-        font-size: 14px;
-        color: red;
-      }
-    </style>
-  </head>
-  <body class="container-fluid p-0">
-    <header>
-      <a href="/delete" class="nav-link">Delete Existing URL</a>
-    </header>
+{% block title %}Shorten URL - LinkShorty{% endblock %}
 
-    <main
-      class="d-flex justify-content-center align-items-center flex-grow-1 py-4"
-    >
-      <div
-        class="shortener-box bg-white p-4 rounded shadow w-100"
-        style="max-width: 400px"
-      >
-        <h2 class="text-center mb-4">URL Shortener</h2>
-        <form action="/" method="post" class="row g-3">
-          {{ form.csrf_token }}
+{% block content %}
+<div class="glass-card">
+  <h2>Shorten Your Link</h2>
+  <form action="/" method="post">
+    {{ form.csrf_token }}
 
-          <div class="col-12">
-            {{form.original_url_input.label}}
-            {{form.original_url_input(class="form-control")}} {% for error in
-            form.original_url_input.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
+    <div class="form-group">
+      {{ form.original_url_input.label(class="form-label") }}
+      {{ form.original_url_input(class="form-control", placeholder="https://example.com/very-long-url") }}
+      {% for error in form.original_url_input.errors %}
+      <div class="error-msg">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-          <div class="col-12">
-            <div id="flash-messages">
-              {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %} {% for category, message in messages %}
-              <div
-                class="alert alert-{{ category }} alert-dismissible fade show"
-                role="alert"
-              >
-                {{ message }}
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"
-                ></button>
-              </div>
-              {% endfor %} {% endif %} {% endwith %}
-            </div>
-          </div>
+    <div class="form-group">
+      {{ form.password_input.label(class="form-label") }}
+      {{ form.password_input(class="form-control", placeholder="Secret Password") }}
+      {% for error in form.password_input.errors %}
+      <div class="error-msg">{{ error }}</div>
+      {% endfor %}
+    </div>
 
-          <div class="col-12">
-            {{form.password_input.label}}
-            {{form.password_input(class="form-control")}}
-          </div>
+    {{ form.url_btn(class="btn-primary") }}
+  </form>
 
-          <div class="col-12">
-            {{form.url_btn(class="btn btn-primary w-100")}}
-          </div>
-        </form>
+  {% if short_code %}
+  <div class="result-box">
+    <p>Your simplified link is ready:</p>
+    <a href="{{ short_code }}" target="_blank" class="short-link" id="shortLink">{{ short_code }}</a>
+    <br>
+    <button onclick="copyToClipboard()" class="btn-primary"
+      style="margin-top: 10px; width: auto; display: inline-block; padding: 0.5rem 1rem; font-size: 0.9rem;">Copy
+      Link</button>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
 
-        {% if short_code %}
-        <div class="text-center mt-3">
-          <a href="{{short_code}}" target="_blank">
-            <p class="cool-font">{{short_code}}</p>
-          </a>
-        </div>
-        {% endif %}
-      </div>
-    </main>
-
-    <footer>
-      <p>
-        &copy; 2025 | All rights reserved | URL Shortener |
-        <i>~Built by `Maaz siddiqui</i>
-      </p>
-      <div class="d-flex flex-wrap justify-content-center gap-3">
-        |<a
-          class="nav-link-footer"
-          href="https://the-maaz-portfolio.vercel.app/"
-          target="_blank"
-          >Portfolio</a
-        >|
-      </div>
-    </footer>
-  </body>
-</html>
+{% block scripts %}
+<script>
+  function copyToClipboard() {
+    const copyText = document.getElementById("shortLink").href;
+    navigator.clipboard.writeText(copyText).then(() => {
+      alert("Copied to clipboard: " + copyText);
+    });
+  }
+</script>
+{% endblock %}
