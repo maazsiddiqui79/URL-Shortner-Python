@@ -498,10 +498,12 @@ Shortify was independently developed as a practical full-stack project to explor
 
 ## 📜 License
 
-No `LICENSE` file is currently present in the repository.
+This project is licensed under the **MIT License**.
 
-If you intend to distribute Shortify as an open-source project, adding an explicit license such as the **MIT License** would clearly define how others may use, modify, and distribute the project.
+You are free to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the software, subject to the terms of the MIT License.
 
+See the [LICENSE](LICENSE) file for the complete license.
 ---
 
 <div align="center">
